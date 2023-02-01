@@ -5,7 +5,7 @@
 #+options: timestamp:t title:t toc:t todo:t |:t
 #+title: GRSTAPS presentation
 #+date: <2023-01-31 Tue>
-#+author: John Phillips, Steve Wilson
+#+author: John Phillips, Steve Willson
 #+email: john@zeus
 #+language: en
 #+select_tags: export
@@ -34,3 +34,29 @@ Planning and Scheduling
 ** Main points
 *** Interleaving 
 *** Task allocation method
+
+** Abstract
+
+*** Robot team coordination requires solving four problems at varying levels of abstraction
+  - What - task planning
+  - Who - task allocation
+  - When - scheduling
+  - How - motion planning
+    
+*** Use an interleaved planning approach
+  - Incentivize compatibility among solutions generated at different levels
+
+** Contributions
+*** Agent-agnostic partially ordered planning
+  - Determines tasks necessary to reach the goal state without committing any agents
+  - Plans only include a set of tasks with ordering constraints
+
+*** Search based approach
+ - Iteratively assigns agents to tasks until the task requirements are satisfied
+  
+**** Two heuristic functions
+  1. Incentivize allocations that satisfy task requirements
+  2. Prefer a shorter makespan
+    
+** Application to TBAM
+*** Separate task planning from allocation and scheduling
