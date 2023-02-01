@@ -43,7 +43,7 @@ Planning and Scheduling
   - When - scheduling
   - How - motion planning
     
-*** Use an interleaved planning approach
+*** GRSTAPS Uses an interleaved planning approach
   - Incentivize compatibility among solutions generated at different levels
 
 ** Contributions
@@ -57,6 +57,30 @@ Planning and Scheduling
 **** Two heuristic functions
   1. Incentivize allocations that satisfy task requirements
   2. Prefer a shorter makespan
-    
+
+** Prior Work
+
+** Problem Formulation - Temporal Planning
+
+** Problem Formulation - Trait-based time-extended task allocation
+
+** Problem Formulation - Scheduling
+
+** Problem Formulation - Motion Planning
+
+** Problem Formulation - STAP-STC
+
+** Framework - Assumptions
+
+** Framework - Task planning
+
+** Framework - Task allocation
+
+** Framework - Scheduling
+
+** Framework - Motion Planning
+
+** Evaluation
+
 ** Application to TBAM
 *** Separate task planning from allocation and scheduling
