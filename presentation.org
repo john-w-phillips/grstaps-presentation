@@ -31,34 +31,42 @@ Planning and Scheduling
    #+ATTR_LaTeX: :height 2in
    [[file:./fig1.jpeg]]
 
-** Main points
-*** Interleaving 
-*** Task allocation method
-
-** Abstract
-
+** Overview
 *** Robot team coordination requires solving four problems at varying levels of abstraction
   - What - task planning
   - Who - task allocation
   - When - scheduling
   - How - motion planning
     
-*** GRSTAPS Uses an interleaved planning approach
-  - Incentivize compatibility among solutions generated at different levels
+*** GRSTAPS takes a holistic view of heterogeneous multi-robot coordination
+  - Incentivize compatibility among solutions generated at different
+    levels.
+  - Incrementally test to see if what we have so far is good at lower
+    levels, revising if not.
+  - Avoid getting too specific in the task planning -- robot
+    allocation is decided later.
 
 ** Contributions
 *** Agent-agnostic partially ordered planning
-  - Determines tasks necessary to reach the goal state without committing any agents
-  - Plans only include a set of tasks with ordering constraints
+  - Determines tasks necessary to reach the goal state without
+    committing any agents.
+  - Plans only include a set of tasks with ordering constraints, and
+    the required task attributes (capabilities which may or may not be provided
+    by multiple robots).
 
 *** Search based approach
- - Iteratively assigns agents to tasks until the task requirements are satisfied
+ - Iteratively assigns agents to tasks until the task requirements are
+   satisfied.
   
 **** Two heuristic functions
-  1. Incentivize allocations that satisfy task requirements
-  2. Prefer a shorter makespan
+  1. Incentivize allocations that satisfy task requirements.
+  2. Prefer a shorter makespan.
 
 ** Prior Work
+
+- Often do not have the capacity to allow robots to undertake joint
+  actions, or assume homogeneous robots.
+- Often require _a priori_ knowledge about subteams, like size.
 
 ** Problem Formulation - Temporal Planning
 
@@ -73,14 +81,54 @@ Planning and Scheduling
 ** Framework - Assumptions
 
 ** Framework - Task planning
-
+*** Temporal planning
+The input to a temporal planner is the same as other planners, except
+that actions have durations associated.
+*** Partial-order planning
+The output of a partial-order planner is a /task network/, a graph
+where each vertex is a task, and an edge is a temporal
+(happens-before) constraint, usually because a task that happens later
+requires some precondition. Tasks that can occur in parallel may occur
+in parallel branches. The scheduler refines this plan and comes up
+with a more concrete ordering.
 ** Framework - Task allocation
 
 ** Framework - Scheduling
-
-** Framework - Motion Planning
+   Given a partial plan and task allocation, which comes with mutex
+   constraints, come up with a schedule for who goes where when, using
+   information from the motion planner about how long things take. The
+   scheduler does a search to find schedules that satisfy constraints
+   and minimize makespan (total time).
 
 ** Evaluation
+GRSTAPs was compared against two other methods:
+- STAA -- Sequential Task Allocation Anytime -- when something goes
+  wrong by the time we hit motion planning, retry allocation
+- STPA -- Sequential Task Planning Anytime -- restart at the task
+  planning layer.
+** Evaluation cont.
+*** Figure                                                  :B_ignoreheading:
+    :PROPERTIES:
+    :BEAMER_env: ignoreheading
+    :BEAMER_col: 0.6
+    :END:
+    Scalability with number of robots -- GRSTAPs performs better and
+    also seems to scale better.
+   #+ATTR_LaTeX: :width 2.5in
+   #+ATTR_LaTeX: :height 2in
+   [[file:./fig9.jpeg]]
+** Evaluation cont.
+*** Figure                                                  :B_ignoreheading:
+    :PROPERTIES:
+    :BEAMER_env: ignoreheading
+    :BEAMER_col: 0.6
+    :END:
+    Scalability with number of goals -- GRSTAPs performs better and
+    also seems to scale better.
+   #+ATTR_LaTeX: :width 2.5in
+   #+ATTR_LaTeX: :height 2in
+   [[file:./fig10.jpeg]]
+** Evaluation cont.
 
 ** Application to TBAM
 *** Separate task planning from allocation and scheduling
