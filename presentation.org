@@ -58,10 +58,6 @@ Planning and Scheduling
  - Iteratively assigns agents to tasks until the task requirements are
    satisfied.
   
-**** Two heuristic functions
-  1. Incentivize allocations that satisfy task requirements.
-  2. Prefer a shorter makespan.
-
 ** Prior Work
 
 - Often do not have the capacity to allow robots to undertake joint
@@ -73,7 +69,7 @@ Planning and Scheduling
 
 ** Planning
 *** Temporal planning
-    The input to a temporal planner is the same as other planners, except
+    The input to a temporal planner is the same as other logic-based planners, except
     that actions have durations associated.
    - State of the world ($W$) is represented by literals and fluents
    - Goal is satisfied if each of its literals explicitly appears in the
@@ -87,8 +83,9 @@ The output of a partial-order planner is a /task network/, a graph
 where each vertex is a task, and an edge is a temporal
 (happens-before) constraint like: $a_i \prec a_j$ -- $a_i$ must occur
 before $a_j$. Tasks that can occur in parallel may occur in parallel
-branches. The scheduler refines this plan and comes up with a more
-concrete ordering, and can work incrementally.
+branches. The scheduler refines this plan once actual robot
+allocations are made and comes up with a more concrete ordering. We
+can do this incrementally.
 ** Planning cont.
 *** Partial-order planning cont.
 Given the start and goal states and domain, we output:
@@ -116,34 +113,51 @@ Given the start and goal states and domain, we output:
 - Traits required by an individual task $a_i$ are defined by a task trait
   requirement vector.
 - Can model the assignment of agents to tasks by an allocation matrix
-- 1 if the nth robot is assigned to the mth task, 0 otherwise.
-- Solution to a trait based task allocation problem is an assignment
-  of robots to tasks in the task network, as a matrix $A$.
-- Allocation $A$ satisfies $Y_\pi$ when $AQ \ge Y_\pi$.
+  of 1's and 0's, the solution to the problem is an allocation that
+  allows tasks to be performed.
+- Allocation $A$ must satisfy $Y_\pi$ when $AQ \ge Y_\pi$.
+- We try to minimize the inequality during search.
 
 ** Scheduling
-  - Determining when tasks ($a_i$ and $a_j$) begin and end.
+  - Determining when tasks ($a_i$ and $a_j$) begin and end, given the
+    plan and allocation.
   - Schedule ($\sigma$) - assignment of start and end times to each
     task in a task network.
 
    Given a partial plan and task allocation, which each specify
    ordering and mutex constraints on tasks, come up with a schedule of
-   which robot is where when, with information from the motion planner.
+   which robot is where when, with information from the motion planner
+   about how long motions take. We try to minimize the makespan of the
+   schedule by prioritizing nodes based on a heuristic function, NSQ.
 
 ** Scheduling cont.
-- Ordering constraints - $a_i$ must take place before $a_j$
+- First, satisfy ordering constraints - $a_i$ must take place before
+  $a_j$, logically speaking.
 - Mutex constraints - $a_i$ must finish before $a_j$ or $a_j$ must
-  finish before $a_i$
+  finish before $a_i$, because of the allocation.
 - Wait constraints - task $a_j$ should not start until a certain time
-  after $a_i$ completes (required motion from $a_i$ to $a_j$)
-- Define $C^i_I$ and $C^i_T$ as the joint initial and terminal
-  configuration spaces, must find a collision free path from the
-  current configuration to C^i_I and then during task ai to
-  configuration C^i_T
-- Specify geometry based pre- and post- conditions of $a_i$
-- The world can change while robots execute actions, this is a complex
-  problem with orderings.
-
+  after $a_i$ completes (required motion from $a_i$ to $a_j$), we get
+  this information from the motion planner.
+- Infeasibility of any of these three stages results in this node
+  being pruned from the task allocation layer's search.
+** Putting it together 
+*** Figure                                                  :B_ignoreheading:
+    :PROPERTIES:
+    :BEAMER_env: ignoreheading
+    :BEAMER_col: 0.6
+    :END:
+   #+ATTR_LaTeX: :width 2.5in
+   #+ATTR_LaTeX: :height 2in
+   [[file:./tab1.jpeg]]
+** Putting it together cont.
+*** Figure                                                  :B_ignoreheading:
+    :PROPERTIES:
+    :BEAMER_env: ignoreheading
+    :BEAMER_col: 0.6
+    :END:
+   #+ATTR_LaTeX: :width 2.5in
+   #+ATTR_LaTeX: :height 2in
+   [[file:./tab2.jpeg]]
 ** Evaluation
 GRSTAPs was compared against two other methods:
 - STAA -- Sequential Task Allocation Anytime -- when something goes
