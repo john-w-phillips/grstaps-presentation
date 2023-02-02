@@ -114,7 +114,7 @@ Given the start and goal states and domain, we output:
 ** Trait-based time-extended task allocation cont.
 - Each task in task network T may be executed individually or
   collectively as part of a coalition, depending on the trait
-  requirements
+  requirements.
 - Traits required by an individual task $a_i$ are defined by a task trait
   requirement vector.
 - Can model the assignment of agents to tasks by an allocation matrix
@@ -164,11 +164,14 @@ Given the start and goal states and domain, we output:
    #+ATTR_LaTeX: :height 2in
    [[file:./tab2.jpeg]]
 ** Evaluation
-GRSTAPs was compared against two other methods:
+GRSTAPs was compared against two other methods that used the same code:
 - STAA -- Sequential Task Allocation Anytime -- when something goes
-  wrong by the time we hit motion planning, retry allocation
+  wrong by the time we hit motion planning, retry allocation.
 - STPA -- Sequential Task Planning Anytime -- restart at the task
   planning layer.
+
+In other words, the same code/methods were used, but we retried at
+different points in the pipeline.
 ** Evaluation cont.
 *** Figure                                                  :B_ignoreheading:
     :PROPERTIES:
@@ -195,7 +198,7 @@ GRSTAPs was compared against two other methods:
 They also compared GRSTAPs with other temporal planners by
 discretizing the problem entirely -- both motion planning and
 allocation were discretized and formulated as a discrete problem for
-temporal task planners. Obviously, this did not do as well.
+temporal task planners. Obviously, these did not do as well.
 *** Figure                                                  :B_ignoreheading:
     :PROPERTIES:
     :BEAMER_env: ignoreheading
