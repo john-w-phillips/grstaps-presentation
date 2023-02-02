@@ -98,6 +98,18 @@ Planning and Scheduling
 
 
 ** Problem Formulation - Scheduling
+- determining when tasks ($a_i$ and $a_j$) begin and end
+- schedule ($\sigma$) - assignment of start and end times to each task in a task network
+
+*** Must respect
+- ordering constraints - $a_i$ must take place before $a_j$
+- mutex constraints - $a_i$ must finish before $a_j$ or $a_j$ must finish before $a_i$
+- wait constraints - task $a_j$ should not start until a certain time after $a_i$ completes (required motion from $a_i$ to $a_j$)
+
+- define $C^i_I$ and $C^i_T$ as the joint initial and terminal configuration spaces, must find a collision free path from the current configuration to C^i_I and then during task ai to configuration C^i_T
+- specify geometry based pre and post conditions of $a_i$
+
+- the world can change while robots execute actions, this is a complex problem with orderings
 
 ** Problem Formulation - Motion Planning
 
