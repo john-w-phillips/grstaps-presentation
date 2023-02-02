@@ -17,9 +17,9 @@
 #+LaTeX_CLASS_OPTIONS: [bigger]
 #+OPTIONS: H:2
 
-* GRSTAPs
+* GRSTAPS
 ** Introduction
-GRSTAPs stands for Graphically Recursive Simultaneous Task Allocation,
+GRSTAPS stands for Graphically Recursive Simultaneous Task Allocation,
 Planning and Scheduling
 *** screenshot                                              :B_ignoreheading:
     :PROPERTIES:
@@ -47,7 +47,7 @@ Planning and Scheduling
     allocation is decided later.
 
 ** Contributions
-- GRSTAPs solves STAP-STC -- Simultaneous Task Allocation and Planning
+- GRSTAPS solves STAP-STC -- Simultaneous Task Allocation and Planning
   with SpatioTemporal Constraints.
 *** Agent-agnostic partially ordered planning
   - Determines tasks necessary to reach the goal state without
@@ -87,7 +87,7 @@ The output of a partial-order planner is a /task network/, a graph
 where each vertex is a task, and an edge is a dependency
 (happens-before) constraint like: $a_i \prec a_j$ -- $a_i$ must occur
 before $a_j$. Tasks that can occur in parallel may occur in parallel
-branches. The GRSTAPs planner does not commit individual robots to
+branches. The GRSTAPS planner does not commit individual robots to
 tasks. The scheduler refines this plan once actual robot allocations
 are made and comes up with a more concrete ordering. We can do this
 incrementally.
@@ -101,7 +101,7 @@ Given the start and goal states and domain, we output:
   - $ST$ a set of tasks
   - $OC$ ordering constraint between tasks in ST
   - $CL$ causal links between tasks in ST
-- In GRSTAPs, we also compute a /desired trait matrix/ $Y_\pi$,
+- In GRSTAPS, we also compute a /desired trait matrix/ $Y_\pi$,
   specifying desired traits for each task (more on that later).
 
 ** Trait-based time-extended task allocation
@@ -145,6 +145,18 @@ Given the start and goal states and domain, we output:
   this information from the motion planner.
 - Infeasibility of any of these three stages results in this node
   being pruned from the task allocation layer's search.
+
+** Motion Planning
+- Define $C^i_I$ and $C^i_T$ as the joint initial and terminal
+  configuration spaces, must find a collision free path from the
+  current configuration to $C^i_I$ and then during task $a_i$ to
+  configuration $C^i_T$
+- Specify geometry based pre- and post- conditions of $a_i$
+- The world can change while robots execute actions, this is a complex
+  problem with orderings.
+- For the purpose of TBAM, we will not focus heavily on the motion planning problem.
+  Given a task plan, allocation, and schedule, we assume that the motion is feasible.
+  
 ** Putting it together 
 *** Figure                                                  :B_ignoreheading:
     :PROPERTIES:
@@ -164,7 +176,7 @@ Given the start and goal states and domain, we output:
    #+ATTR_LaTeX: :height 2in
    [[file:./tab2.jpeg]]
 ** Evaluation
-GRSTAPs was compared against two other methods that used the same code:
+GRSTAPS was compared against two other methods that used the same code:
 - STAA -- Sequential Task Allocation Anytime -- when something goes
   wrong by the time we hit motion planning, retry allocation.
 - STPA -- Sequential Task Planning Anytime -- restart at the task
@@ -178,7 +190,7 @@ different points in the pipeline.
     :BEAMER_env: ignoreheading
     :BEAMER_col: 0.6
     :END:
-    Scalability with number of robots -- GRSTAPs performs better and
+    Scalability with number of robots -- GRSTAPS performs better and
     also seems to scale better.
    #+ATTR_LaTeX: :width 2.5in
    #+ATTR_LaTeX: :height 2in
@@ -189,13 +201,13 @@ different points in the pipeline.
     :BEAMER_env: ignoreheading
     :BEAMER_col: 0.6
     :END:
-    Scalability with number of goals -- GRSTAPs performs better and
+    Scalability with number of goals -- GRSTAPS performs better and
     also seems to scale better.
    #+ATTR_LaTeX: :width 2.5in
    #+ATTR_LaTeX: :height 2in
    [[file:./fig10.jpeg]]
 ** Evaluation cont.
-They also compared GRSTAPs with other temporal planners by
+They also compared GRSTAPS with other temporal planners by
 discretizing the problem entirely -- both motion planning and
 allocation were discretized and formulated as a discrete problem for
 temporal task planners. Obviously, these did not do as well.
@@ -204,7 +216,7 @@ temporal task planners. Obviously, these did not do as well.
     :BEAMER_env: ignoreheading
     :BEAMER_col: 0.6
     :END:
-    Scalability with number of goals -- GRSTAPs performs better and
+    Scalability with number of goals -- GRSTAPS performs better and
     also seems to scale better.
    #+ATTR_LaTeX: :width 2.5in
    #+ATTR_LaTeX: :height 2in
@@ -216,7 +228,7 @@ Instead of waiting for the bottom layer to inform us that something
 isn't possible, each layer should when possible check for feasibility
 incrementally in an interleaved way.
 *** Think of a plan in terms of capability requirements
-GRSTAPs' trait-based allocation approach allows the planner to avoid
+GRSTAPS' trait-based allocation approach allows the planner to avoid
 getting into specifics about which robots do what when, making this
 flexible for heterogeneous robot teams and reducing dimensionality of
 the planner's problem.
