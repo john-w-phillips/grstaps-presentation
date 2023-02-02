@@ -4,7 +4,7 @@
 #+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
 #+options: timestamp:t title:t toc:t todo:t |:t
 #+title: GRSTAPS presentation
-#+date: <2023-01-31 Tue>
+#+date: 2023-02-02 
 #+author: John Phillips, Steve Willson
 #+email: john@zeus
 #+language: en
@@ -48,21 +48,54 @@ Planning and Scheduling
 
 ** Contributions
 *** Agent-agnostic partially ordered planning
-  - Determines tasks necessary to reach the goal state without committing any agents
-  - Plans only include a set of tasks with ordering constraints
+- Determines tasks necessary to reach the goal state without committing any agents
+- Plans only include a set of tasks with ordering constraints
 
 *** Search based approach
- - Iteratively assigns agents to tasks until the task requirements are satisfied
+- Iteratively assigns agents to tasks until the task requirements are satisfied
   
 **** Two heuristic functions
-  1. Incentivize allocations that satisfy task requirements
-  2. Prefer a shorter makespan
+1. Incentivize allocations that satisfy task requirements
+2. Prefer a shorter makespan
 
 ** Prior Work
 
-** Problem Formulation - Temporal Planning
 
+
+** Problem Formulation - Temporal Planning
+- State of the world ($W$) is represented by literals and fluents
+- Goal is satisfied if each of its literals explicitly appears in the state description and each fluent is assigned to a specific value
+- Initial world state $s_{init}$ and a goal state $G$, the planner's job is to find a sequence of tasks to get from $s_{init}$ to $G$
+
+** Partial order plan
+- $\pi = \langle ST, OC, CL \rangle$
+- $ST$ a set of tasks
+- $OC$ ordering constraint between tasks in ST
+- $CL$ causal links between tasks in ST
+- ordering constraint - $a_i \prec a_j$, $a_i$ must occur before $a_j$
+- causal link, $a_i \xrightarrow[]{p} a_j$, indicates that precondition p of aj is supported by one of the effects of ai
+- partially ordered plan can be represented by a directed graph in which each vertex represents a task and each edge represents an ordering constraint
+- task network - graph where each vertex represents a task and each edge represents a temporal constraint
+- partial order plan - specific type of task network that only has ordering constraints as edges
+  
 ** Problem Formulation - Trait-based time-extended task allocation
+- heterogeneous team of N robots that must collectively execute a set of tasks
+- each robot is defined by its abilities/traits
+- modeled as continuous variables encoded by a trait vector
+- robot trait matrix includes all individual trait vectors
+
+- each row corresponds to one robot, each column to a specific trait
+- can find out the heterogeneity of agents easily interpretible
+** Problem Formulation - Trait-based time-extended task allocation
+- each task in task network T may be executed individually or collectively as part of a coalition, depending on the trait requirements
+- traits required by an individual task ai are defined by a task trait requirement vector
+
+- can model the assignment of agents to tasks by an allocation matrix
+- 1 if the nth robot is assigned to the mth task, 0 otherwise
+
+- solution to a trait based task allocation problem is an assignment of robots to tasks in the task network
+- allocation $A$ satisfies $Y_\pi$ when $AQ$ is an element-wise greater than or equal to $Y_\pi$
+
 
 ** Problem Formulation - Scheduling
 
