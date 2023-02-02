@@ -96,13 +96,13 @@ incrementally.
 Given the start and goal states and domain, we output:
 - Partially ordered plan represented by a directed graph in which each
   vertex represents a task and each edge represents an ordering
-  constraint, denoted $\pi$.
+  constraint, denoted $\pi$:
   - $\pi = \langle ST, OC, CL \rangle$
   - $ST$ a set of tasks
   - $OC$ ordering constraint between tasks in ST
   - $CL$ causal links between tasks in ST
 - In GRSTAPs, we also compute a /desired trait matrix/ $Y_\pi$,
-  specifying desired traits for each task.
+  specifying desired traits for each task (more on that later).
 
 ** Trait-based time-extended task allocation
 - Heterogeneous team of N robots that must collectively execute a set of tasks.
