@@ -47,6 +47,8 @@ Planning and Scheduling
     allocation is decided later.
 
 ** Contributions
+- GRSTAPs solves STAP-STC -- Simultaneous Task Allocation and Planning
+  with SpatioTemporal Constraints.
 *** Agent-agnostic partially ordered planning
   - Determines tasks necessary to reach the goal state without
     committing any agents.
@@ -68,6 +70,7 @@ Planning and Scheduling
 - Plans only include a set of tasks with ordering constraints
 
 ** Planning
+
 *** Temporal planning
     The input to a temporal planner is the same as other logic-based planners, except
     that actions have durations associated.
@@ -116,7 +119,7 @@ Given the start and goal states and domain, we output:
   of 1's and 0's, the solution to the problem is an allocation that
   allows tasks to be performed.
 - Allocation $A$ must satisfy $Y_\pi$ when $AQ \ge Y_\pi$.
-- We try to minimize the inequality during search.
+- We try to maximize $AQ$ during search.
 
 ** Scheduling
   - Determining when tasks ($a_i$ and $a_j$) begin and end, given the
@@ -187,6 +190,20 @@ GRSTAPs was compared against two other methods:
    #+ATTR_LaTeX: :height 2in
    [[file:./fig10.jpeg]]
 ** Evaluation cont.
+They also compared GRSTAPs with other temporal planners by
+discretizing the problem entirely -- both motion planning and
+allocation were discretized and formulated as a discrete problem for
+temporal task planners. Obviously, this did not do as well.
+*** Figure                                                  :B_ignoreheading:
+    :PROPERTIES:
+    :BEAMER_env: ignoreheading
+    :BEAMER_col: 0.6
+    :END:
+    Scalability with number of goals -- GRSTAPs performs better and
+    also seems to scale better.
+   #+ATTR_LaTeX: :width 2.5in
+   #+ATTR_LaTeX: :height 2in
+   [[file:./fig11.jpeg]]
 
 ** Application to TBAM
 *** Interleaving layers
