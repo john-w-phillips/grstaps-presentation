@@ -66,8 +66,6 @@ Planning and Scheduling
   actions, or assume homogeneous robots.
 - Often require extensive /a priori/ knowledge about subteams going
   into the task planner, like size.
-- Determines tasks necessary to reach the goal state without committing any agents
-
 
 ** Planning
 
@@ -82,15 +80,17 @@ Planning and Scheduling
      sequence of tasks to get from $s_{init}$ to $G$.
    - Plans only include a set of tasks with ordering constraints, to
      allow tasks to be executed in parallel.
+
 ** Planning cont.
 *** Partial-order planning.
 The output of a partial-order planner is a /task network/, a graph
 where each vertex is a task, and an edge is a dependency
 (happens-before) constraint like: $a_i \prec a_j$ -- $a_i$ must occur
 before $a_j$. Tasks that can occur in parallel may occur in parallel
-branches. The scheduler refines this plan once actual robot
-allocations are made and comes up with a more concrete ordering. We
-can do this incrementally.
+branches. The GRSTAPs planner does not commit individual robots to
+tasks. The scheduler refines this plan once actual robot allocations
+are made and comes up with a more concrete ordering. We can do this
+incrementally.
 ** Planning cont.
 *** Partial-order planning cont.
 Given the start and goal states and domain, we output:
