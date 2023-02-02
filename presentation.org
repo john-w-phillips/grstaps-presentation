@@ -32,7 +32,7 @@ Planning and Scheduling
    [[file:./fig1.jpeg]]
 
 ** Overview
-*** Robot team coordination problem formulation
+*** Heterogeneous robot team coordination problem formulation
   - What - task planning
   - Who - task allocation
   - When - scheduling
@@ -41,7 +41,7 @@ Planning and Scheduling
 *** GRSTAPS takes a holistic view of heterogeneous multi-robot coordination
   - Incentivize compatibility among solutions generated at different
     levels.
-  - Incrementally test to see if what we have so far is good at lower
+  - Incrementally test to see if what we have so far is feasible at lower
     levels, revising if not.
   - Avoid getting too specific in the task planning -- robot
     allocation is decided later.
@@ -151,11 +151,13 @@ Given the start and goal states and domain, we output:
   configuration spaces, must find a collision free path from the
   current configuration to $C^i_I$ and then during task $a_i$ to
   configuration $C^i_T$
+- $I_c$ set of initial configurations for all robots
+- $L_A$ set of initial and terminal configurations for all tasks
+- $W$ describes the static geometry of the world 
 - Specify geometry based pre- and post- conditions of $a_i$
 - The world can change while robots execute actions, this is a complex
   problem with orderings.
-- For the purpose of TBAM, we will not focus heavily on the motion planning problem.
-  Given a task plan, allocation, and schedule, we assume that the motion is feasible.
+
   
 ** Putting it together 
 *** Figure                                                  :B_ignoreheading:
