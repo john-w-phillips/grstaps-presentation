@@ -4,7 +4,7 @@
 #+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
 #+options: timestamp:t title:t toc:t todo:t |:t
 #+title: GRSTAPS presentation
-#+date: <2023-01-31 Tue>
+#+date: 2023-02-02 
 #+author: John Phillips, Steve Willson
 #+email: john@zeus
 #+language: en
@@ -32,7 +32,7 @@ Planning and Scheduling
    [[file:./fig1.jpeg]]
 
 ** Overview
-*** Robot team coordination requires solving four problems at varying levels of abstraction
+*** Robot team coordination problem formulation
   - What - task planning
   - Who - task allocation
   - When - scheduling
@@ -54,7 +54,7 @@ Planning and Scheduling
     the required task attributes (capabilities which may or may not be provided
     by multiple robots).
 
-*** Search based approach
+*** Interleaved approach
  - Iteratively assigns agents to tasks until the task requirements are
    satisfied.
   
@@ -66,39 +66,83 @@ Planning and Scheduling
 
 - Often do not have the capacity to allow robots to undertake joint
   actions, or assume homogeneous robots.
-- Often require _a priori_ knowledge about subteams, like size.
+- Often require extensive /a priori/ knowledge about subteams going
+  into the task planner, like size.
+- Determines tasks necessary to reach the goal state without committing any agents
+- Plans only include a set of tasks with ordering constraints
 
-** Problem Formulation - Temporal Planning
-
-** Problem Formulation - Trait-based time-extended task allocation
-
-** Problem Formulation - Scheduling
-
-** Problem Formulation - Motion Planning
-
-** Problem Formulation - STAP-STC
-
-** Framework - Assumptions
-
-** Framework - Task planning
+** Planning
 *** Temporal planning
-The input to a temporal planner is the same as other planners, except
-that actions have durations associated.
-*** Partial-order planning
+    The input to a temporal planner is the same as other planners, except
+    that actions have durations associated.
+   - State of the world ($W$) is represented by literals and fluents
+   - Goal is satisfied if each of its literals explicitly appears in the
+     state description and each fluent is assigned to a specific value.
+   - Initial world state $s_{init}$ and a goal state $G$, the
+     planner's job is to find a (in this case) partially ordered
+     sequence of tasks to get from $s_{init}$ to $G$.
+** Planning cont.
+*** Partial-order planning.
 The output of a partial-order planner is a /task network/, a graph
 where each vertex is a task, and an edge is a temporal
-(happens-before) constraint, usually because a task that happens later
-requires some precondition. Tasks that can occur in parallel may occur
-in parallel branches. The scheduler refines this plan and comes up
-with a more concrete ordering.
-** Framework - Task allocation
+(happens-before) constraint like: $a_i \prec a_j$ -- $a_i$ must occur
+before $a_j$. Tasks that can occur in parallel may occur in parallel
+branches. The scheduler refines this plan and comes up with a more
+concrete ordering, and can work incrementally.
+** Planning cont.
+*** Partial-order planning cont.
+Given the start and goal states and domain, we output:
+- Partially ordered plan represented by a directed graph in which each
+  vertex represents a task and each edge represents an ordering
+  constraint, denoted $\pi$.
+  - $\pi = \langle ST, OC, CL \rangle$
+  - $ST$ a set of tasks
+  - $OC$ ordering constraint between tasks in ST
+  - $CL$ causal links between tasks in ST
+- In GRSTAPs, we also compute a /desired trait matrix/ $Y_\pi$,
+  specifying desired traits for each task.
 
-** Framework - Scheduling
-   Given a partial plan and task allocation, which comes with mutex
-   constraints, come up with a schedule for who goes where when, using
-   information from the motion planner about how long things take. The
-   scheduler does a search to find schedules that satisfy constraints
-   and minimize makespan (total time).
+** Trait-based time-extended task allocation
+- Heterogeneous team of N robots that must collectively execute a set of tasks.
+- Each robot is defined by its abilities/traits, which are modeled as
+  continuous variables encoded by a trait vector.
+- Robot trait matrix includes all individual trait vectors.
+- Each row corresponds to one robot, each column to a specific trait.
+
+** Trait-based time-extended task allocation cont.
+- Each task in task network T may be executed individually or
+  collectively as part of a coalition, depending on the trait
+  requirements
+- Traits required by an individual task $a_i$ are defined by a task trait
+  requirement vector.
+- Can model the assignment of agents to tasks by an allocation matrix
+- 1 if the nth robot is assigned to the mth task, 0 otherwise.
+- Solution to a trait based task allocation problem is an assignment
+  of robots to tasks in the task network, as a matrix $A$.
+- Allocation $A$ satisfies $Y_\pi$ when $AQ \ge Y_\pi$.
+
+** Scheduling
+  - Determining when tasks ($a_i$ and $a_j$) begin and end.
+  - Schedule ($\sigma$) - assignment of start and end times to each
+    task in a task network.
+
+   Given a partial plan and task allocation, which each specify
+   ordering and mutex constraints on tasks, come up with a schedule of
+   which robot is where when, with information from the motion planner.
+
+** Scheduling cont.
+- Ordering constraints - $a_i$ must take place before $a_j$
+- Mutex constraints - $a_i$ must finish before $a_j$ or $a_j$ must
+  finish before $a_i$
+- Wait constraints - task $a_j$ should not start until a certain time
+  after $a_i$ completes (required motion from $a_i$ to $a_j$)
+- Define $C^i_I$ and $C^i_T$ as the joint initial and terminal
+  configuration spaces, must find a collision free path from the
+  current configuration to C^i_I and then during task ai to
+  configuration C^i_T
+- Specify geometry based pre- and post- conditions of $a_i$
+- The world can change while robots execute actions, this is a complex
+  problem with orderings.
 
 ** Evaluation
 GRSTAPs was compared against two other methods:
@@ -131,4 +175,12 @@ GRSTAPs was compared against two other methods:
 ** Evaluation cont.
 
 ** Application to TBAM
-*** Separate task planning from allocation and scheduling
+*** Interleaving layers
+Instead of waiting for the bottom layer to inform us that something
+isn't possible, each layer should when possible check for feasibility
+incrementally in an interleaved way.
+*** Think of a plan in terms of capability requirements
+GRSTAPs' trait-based allocation approach allows the planner to avoid
+getting into specifics about which robots do what when, making this
+flexible for heterogeneous robot teams and reducing dimensionality of
+the planner's problem.
